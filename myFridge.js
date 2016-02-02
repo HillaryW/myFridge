@@ -1,23 +1,43 @@
-if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+Products = new Mongo.Collection('products');
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+if (Meteor.isClient) {
+    
+  Template.fridge.helpers({
+    products: function(){
+      return Products.find({
+        place: 'fridge'
+        });
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.productList.helpers({
+    products: function() {
+      return Products.find({
+        place: 'supermarket'
+        });
     }
   });
 }
 
 if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
+ Meteor.startup(function () {
+    
+  Products.remove({});
+  
+  //fill the database with some products
+  Products.insert({
+    name: 'milk',
+    img: '/milk.png',
+    place: 'fridge'
+    });
+  
+  Products.insert({
+    name: 'Bread',
+    img: '/bread.png',
+    place: 'supermarket'
+    });
+  
   });
-}
+  
+  }
+
