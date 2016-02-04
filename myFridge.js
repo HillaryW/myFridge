@@ -17,8 +17,47 @@ if (Meteor.isClient) {
         });
     }
   });
+  
+  
+  Template.fridge.onRendered(function () {
+    var templateInstance = this;
+    
+    templateInstance.$('#fridge').droppable({
+      drop: function(evt, ui) {
+        var query = { _id: ui.draggable.data('id') };
+        var changes = {$set: {place: 'fridge' } };
+        
+        Products.update(query, changes); 
+        }
+    });
+  });
+  
+  
+  Template.productList.onRendered(function () {
+    var templateInstance = this;
+    
+    templateInstance.$('#supermarket').droppable({
+      drop: function(evt, ui) {
+        var query = { _id: ui.draggable.data('id') };
+        var changes = {$set: {place: 'supermarket'} };
+        
+        Products.update(query, changes);
+        }
+    });
+  });
+  
+  
+  Template.productListItem.onRendered(function () {
+    var templateInstance = this;
+    
+    templateInstance.$('.draggable').draggable({
+      cursor: 'move',
+      helper: 'clone'
+      });
+    });
 }
 
+ 
 if (Meteor.isServer) {
  Meteor.startup(function () {
     
@@ -36,7 +75,20 @@ if (Meteor.isServer) {
     img: '/bread.png',
     place: 'supermarket'
     });
-  
+    
+    Products.insert({
+    name: 'juice',
+    img: '/juice.png',
+    place: 'supermarket'
+    });
+    
+    
+    
+    Products.insert({
+    name: 'banana',
+    img: '/banana.png',
+    place: 'supermarket'
+    });
   });
   
   }
